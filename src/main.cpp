@@ -17,7 +17,8 @@ int main(int argc, char** argv)
     exit(0);
   }
 
-  LZW_Encoder encoder(16, 9);
+  LZW_Encoder encoder;
+
   encoder.compress(argv[1]);
 
   exit(0);

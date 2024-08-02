@@ -16,7 +16,7 @@ using namespace std;
 
 struct Table_Value {
   uint32_t index;
-  char* symbol;
+  string symbol;
 };
 
 struct Symbol_Table {
@@ -31,10 +31,15 @@ class LZW_Encoder {
     int compress(char* file_name);
     int decompress();
 
+    void dump_table();
+
   private:
     int max_bits;
     int num_bits;
     struct Symbol_Table* table;
 
     void init_symbol_table();
+    void output(int i);
+    int table_insert(string s);
+    int table_get_index(string s);
 };
