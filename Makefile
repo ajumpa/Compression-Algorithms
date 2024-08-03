@@ -15,7 +15,7 @@ run: clean all
 
 test1: clean all
 	clear
-	./$(BIN)/$(EXECUTABLE) test/abc.txt
+	./$(BIN)/$(EXECUTABLE) test/abc.txt test/abc.txt.lzw
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)

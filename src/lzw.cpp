@@ -40,19 +40,25 @@ void LZW_Encoder::init_symbol_table()
 
 void LZW_Encoder::dump_table()
 {
-  for (int i = 0; i < table->size; i++)
-  {
+  for (uint32_t i = 0; i < table->size; i++)
     printf("%d | %s\n", table->table[i]->index, table->table[i]->symbol.c_str());
-  }
 }
 
-void LZW_Encoder::output(int i)
+void LZW_Encoder::output(ofstream& output_file, int i, int num_bits)
 {
 
 }
 
 int LZW_Encoder::table_get_index(string s)
 {
+
+  Table_Value *v;
+  int ix = 0;
+  while( (v = table->table[ix]) )
+  {
+    printf("%s\n", v->symbol.c_str());
+  }
+
   return 0;
 }
 
@@ -61,16 +67,24 @@ int LZW_Encoder::table_insert(string s)
   return 0;
 }
 
-int LZW_Encoder::compress(char* file_name)
+int LZW_Encoder::compress(char* input_file_name, char* output_file_name)
 {
-  assert(file_name);
+  assert(input_file_name && output_file_name);
 
   ifstream input_file;
-  input_file.open(file_name, std::ios_base::in);
+  ofstream output_file;
 
+  input_file.open(input_file_name, std::ios_base::in);
   if (!input_file.is_open())
   {
-    cerr << "Failed to open " << file_name << endl;
+    cerr << "Failed to open " << input_file_name << endl;
+    return 0;
+  }
+
+  output_file.open(output_file_name, std::ios_base::out);
+  if (!output_file.is_open())
+  {
+    cerr << "Failed to open " << input_file_name << endl;
     return 0;
   }
 
@@ -83,12 +97,12 @@ int LZW_Encoder::compress(char* file_name)
     int ix = table_get_index(augmented_str);
     if (ix)
     {
-
       working_str = augmented_str;
     }
+
     else if (table->size >= MAX_TABLE_ENTRIES)
     {
-      output(ix);
+      output(output_file, ix, num_bits);
       working_str.clear();
       working_str = c;
     }
@@ -96,7 +110,7 @@ int LZW_Encoder::compress(char* file_name)
     {
       // Insert str into table
       ix = table_insert(working_str);
-      output(ix);
+      output(output_file, ix, num_bits);
       working_str.clear();
       
       if (table->size > pow(2,num_bits))
@@ -104,6 +118,7 @@ int LZW_Encoder::compress(char* file_name)
     }
   }
 
+  output_file.close();
   input_file.close();
 
   return 1;

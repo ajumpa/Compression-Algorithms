@@ -28,7 +28,7 @@ class LZW_Encoder {
   public:
     LZW_Encoder(int max_bits, int num_bits);
     LZW_Encoder();
-    int compress(char* file_name);
+    int compress(char* file_name, char* output_file_name);
     int decompress();
 
     void dump_table();
@@ -39,7 +39,7 @@ class LZW_Encoder {
     struct Symbol_Table* table;
 
     void init_symbol_table();
-    void output(int i);
+    void output(ofstream& output_file, int i, int num_bits);
     int table_insert(string s);
     int table_get_index(string s);
 };

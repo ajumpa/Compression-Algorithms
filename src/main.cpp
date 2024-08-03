@@ -11,15 +11,17 @@ using namespace std;
 int main(int argc, char** argv)
 {
 
-  if (argc < 2)
+  if (argc < 3)
   {
-    cout << "No input file specified..." << endl;
+    printf("Usage: my_compressor [input] [output]");
     exit(0);
   }
 
+
   LZW_Encoder encoder;
 
-  encoder.compress(argv[1]);
+  if (argv[1] && argv[2])
+    encoder.compress(argv[1], argv[2]);
 
   exit(0);
 }
